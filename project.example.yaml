@@ -1,0 +1,37 @@
+# Template for project.yaml. Copy it, then fill in your own values:
+#   cp project.example.yaml project.yaml
+name: my-project
+videos:                         # one or more recordings
+- demo.mp4
+docs:                           # Markdown paths or globs
+- docs/*.md
+platforms:                      # linkedin | reels | facebook
+- linkedin
+- reels
+max_duration: 60.0              # hard cap in seconds, up to 600
+brand:
+  author_name: Your Name
+  linkedin_url: https://www.linkedin.com/in/your-handle
+  primary_color: '#0A66C2'      # #RRGGBB
+  accent_color: '#F5F5F5'       # #RRGGBB
+  logo: null
+  photo: null                   # square-ish photo for the end card
+  font: null                    # bold .ttf/.otf for titles and banners
+  font_regular: null            # .ttf/.otf for captions
+observability:
+  provider: local               # local | langsmith | none
+  project: ai-video-editor      # LangSmith project
+  log_images: thumbnails        # full | thumbnails | none
+inference:
+  backend: claude_code          # claude_code | api
+  claude_path: claude
+writing:
+  skill: null                   # Claude Code skill the copywriter loads
+  linkedin_post: true
+models:
+  planner: opus                 # Claude Code alias or full model id
+  worker: sonnet
+ffmpeg:
+  path: ffmpeg
+  ffprobe: ffprobe
+  encoder: auto                 # auto | nvenc | cpu
