@@ -1,0 +1,108 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/home/sinsankio/self/ai-video-editor/.venv/bin/python3\" -m ave hook",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/home/sinsankio/self/ai-video-editor/.venv/bin/python3\" -m ave hook",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/home/sinsankio/self/ai-video-editor/.venv/bin/python3\" -m ave hook",
+            "timeout": 10,
+            "async": true
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/home/sinsankio/self/ai-video-editor/.venv/bin/python3\" -m ave hook",
+            "timeout": 10,
+            "async": true
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/home/sinsankio/self/ai-video-editor/.venv/bin/python3\" -m ave hook",
+            "timeout": 10,
+            "async": true
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/home/sinsankio/self/ai-video-editor/.venv/bin/python3\" -m ave hook",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/home/sinsankio/self/ai-video-editor/.venv/bin/python3\" -m ave hook",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/home/sinsankio/self/ai-video-editor/.venv/bin/python3\" -m ave hook",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(ave:*)"
+    ]
+  }
+}
