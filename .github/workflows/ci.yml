@@ -1,0 +1,61 @@
+name: ci
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync --locked
+      - run: uv run ruff check
+      - run: uv run ruff format --check
+
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync --locked
+      # unit tests: no ffmpeg, no OCR models, no credentials, no network
+      - run: uv run pytest -m "not ffmpeg and not ocr"
+
+  test-ffmpeg:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg
+      - run: uv sync --locked --extra ocr
+      # OCR models download on first use; cache them between runs
+      - uses: actions/cache@v4
+        with:
+          path: .venv/lib/python3.13/site-packages/rapidocr/models
+          key: rapidocr-models-${{ hashFiles('uv.lock') }}
+      - run: uv run pytest -m "ffmpeg or ocr"
+      # CLI smoke: runners have no GPU and no Claude Code, so those checks are skipped
+      - name: ave smoke
+        run: |
+          set -euo pipefail
+          P="$RUNNER_TEMP/proj"
+          mkdir -p "$P"
+          uv run python -c "from pathlib import Path; from tests.synth import make_project_files; make_project_files(Path('$P'))"
+          uv run ave -p "$P" init --yes --name "CI Demo" --video demo.mp4 --docs "docs/*.md" --platform linkedin --tracing local
+          uv run ave -p "$P" doctor --json --skip claude --skip gpu --skip nvenc
+          uv run ave -p "$P" analyze --json > /dev/null
+          uv run ave -p "$P" context
+          uv run ave -p "$P" agents
