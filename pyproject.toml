@@ -1,0 +1,64 @@
+[project]
+name = "ai-video-editor"
+version = "0.1.0"
+description = "Claude-powered editor that turns software demo recordings into short social videos"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "anthropic>=2.3.0",
+    "langsmith>=0.14.16",
+    "numpy>=2.5.4",
+    "opencv-python-headless>=5.0.0.93",
+    "pillow>=13.0.0",
+    "prompt-toolkit>=3.0.53",
+    "pydantic>=2.14.2",
+    "pyyaml>=6.0.3",
+    "rich>=15.0.0",
+    "typer>=0.27.3",
+]
+
+[project.scripts]
+ave = "ave.cli:main"
+
+[project.optional-dependencies]
+ocr = [
+    "onnxruntime>=1.31.1",
+    "rapidocr>=3.10.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.17,<0.10"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "ave"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+    "ruff>=0.17.3",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+filterwarnings = [
+    # third-party: langsmith.wrappers imports its own deprecated shim
+    "ignore:langsmith.wrappers._openai_agents is deprecated:DeprecationWarning",
+]
+markers = [
+    "ffmpeg: needs a real ffmpeg binary on PATH",
+    "ocr: needs the `ocr` extra (rapidocr + onnxruntime; downloads models on first use)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+extend-exclude = ["tmp"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+# nested `with` mirrors span nesting in tracing tests
+"tests/*" = ["SIM117"]
